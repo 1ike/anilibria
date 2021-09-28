@@ -5,10 +5,6 @@ function xPagination(a){
 		items: a,
 		itemsOnPage: 12,
 		cssStyle: 'light-theme',
-		onPageClick: function(page){
-			getCatalog(page, false);
-			$('html, body').animate({scrollTop: $(".contentmenu").offset().top }, 0);
-		}
 	});
 }
 
@@ -134,3 +130,22 @@ $(document).on('click', '[data-catalog-update]', function(e){
 	e.preventDefault();	
 	getCatalog(1, true);
 });
+
+
+function updateContentWhenHashChanges() {
+	var page;
+
+	if (location.hash === '') {
+		page = 1;
+	} else {
+		page = Number(location.hash.split('page-')[1]);
+	}
+
+	if (page === 0 || isNaN(page)) return;
+
+	getCatalog(page, false);
+	$('html, body').animate({scrollTop: $(".contentmenu").offset().top }, 0);
+	$("#xpagination").pagination('selectPage', page);
+}
+
+window.addEventListener("hashchange", updateContentWhenHashChanges);
